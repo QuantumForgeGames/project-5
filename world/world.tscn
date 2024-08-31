@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://blhop6xxf4e7f"]
+
+[ext_resource type="Script" path="res://world/world.gd" id="1_3mal0"]
+[ext_resource type="Texture2D" uid="uid://dcts6dr1mggcy" path="res://world/floor_main.png" id="1_mpuym"]
+[ext_resource type="PackedScene" uid="uid://bpvsuqrmyoivc" path="res://characters/player/player.tscn" id="2_dqglm"]
+
+[sub_resource type="Curve2D" id="Curve2D_17h6k"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1920, 0, 0, 0, 0, 0, 1920, 1080, 0, 0, 0, 0, 0, 1080, 0, 0, 0, 0, -8, 0, 0, 0, 0, 0, 1920, 0)
+}
+point_count = 5
+
+[node name="World" type="Node2D" node_paths=PackedStringArray("player", "start_position", "mob_spawn_location", "mob_timer")]
+script = ExtResource("1_3mal0")
+player = NodePath("Player")
+start_position = NodePath("StartPosition")
+mob_spawn_location = NodePath("MobPath/MobSpawnLocation")
+mob_timer = NodePath("MobTimer")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("1_mpuym")
+
+[node name="Player" parent="." instance=ExtResource("2_dqglm")]
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(960, 540)
+
+[node name="MobPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_17h6k")
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
+position = Vector2(1920, 0)
+rotation = 1.5708
+
+[node name="MobTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
