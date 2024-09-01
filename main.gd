@@ -6,10 +6,12 @@ extends Node
 @export var start_timer: Timer
 @export var music_player: AudioStreamPlayer2D
 
+var arrow_array: Array = [Game.LEFT_ARROW, Game.UP_ARROW, Game.RIGHT_ARROW, Game.DOWN_ARROW]
 
 func _ready() -> void:
-	world.player.gameplay_ended.connect(game_over)
+	#world.player.gameplay_ended.connect(game_over)
 	gui.hud.gameplay_started.connect(new_game)
+	gui.hud.add_arrows(arrow_array.size())
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -24,8 +26,8 @@ func game_over():
 
 
 func new_game():
-	gui.start()
-	world.start()
+	gui.start(arrow_array)
+	world.start(arrow_array)
 	start_timer.start()
 	get_tree().call_group("mobs", "queue_free")
 	music_player.play()

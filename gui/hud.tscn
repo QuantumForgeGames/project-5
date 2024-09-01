@@ -1,14 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://f2rhb1ju02uk"]
+[gd_scene load_steps=5 format=3 uid="uid://f2rhb1ju02uk"]
 
 [ext_resource type="Script" path="res://gui/hud.gd" id="1_wwq1r"]
-[ext_resource type="FontFile" uid="uid://buq8n15amht8l" path="res://gui/fonts/AncientModernTales-a7Po.ttf" id="2_2xg22"]
+[ext_resource type="FontFile" uid="uid://cljxgk1xh1vw6" path="res://gui/fonts/AncientModernTales-a7Po.ttf" id="2_2xg22"]
+[ext_resource type="Texture2D" uid="uid://dalqtmjkugjop" path="res://gui/font.png" id="3_agks7"]
 
-[node name="HUD" type="CanvasLayer" node_paths=PackedStringArray("score_label", "message_label", "start_button", "message_timer")]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kkfuq"]
+texture = ExtResource("3_agks7")
+texture_margin_left = 16.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+region_rect = Rect2(0, 48, 240, 72)
+
+[node name="HUD" type="CanvasLayer" node_paths=PackedStringArray("score_label", "message_label", "start_button", "message_timer", "input_container")]
 script = ExtResource("1_wwq1r")
 score_label = NodePath("ScoreLabel")
 message_label = NodePath("MessageLabel")
 start_button = NodePath("StartButton")
 message_timer = NodePath("MessageTimer")
+input_container = NodePath("InputContainer")
 
 [node name="ScoreLabel" type="Label" parent="."]
 anchors_preset = 1
@@ -59,6 +69,24 @@ theme_override_font_sizes/font_size = 64
 text = "Start"
 
 [node name="MessageTimer" type="Timer" parent="."]
+
+[node name="InputContainer" type="PanelContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 904.0
+offset_right = 395.0
+offset_bottom = -104.0
+grow_vertical = 2
+scale = Vector2(2, 2)
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_kkfuq")
+metadata/_edit_group_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InputContainer"]
+layout_mode = 2
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]

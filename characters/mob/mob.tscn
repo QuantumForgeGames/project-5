@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://c43dt3kwb11dc"]
 
-[ext_resource type="Texture2D" uid="uid://dfxya4i4g313f" path="res://characters/mob/enemy_walking1.png" id="1_f1vq2"]
+[ext_resource type="Texture2D" uid="uid://bc7homjmvysc2" path="res://characters/mob/enemy_walking1.png" id="1_f1vq2"]
 [ext_resource type="Script" path="res://characters/mob/mob.gd" id="1_h5xt7"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_q65dg"]

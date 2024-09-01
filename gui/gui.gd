@@ -8,10 +8,11 @@ extends Control
 var score
 
 
-func start():
+func start(array: Array):
 	score = 0
 	hud.update_score(score)
 	hud.show_message("Get Ready")
+	hud.rotate_arrows(array)
 
 
 func end():

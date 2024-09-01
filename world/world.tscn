@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://blhop6xxf4e7f"]
+[gd_scene load_steps=7 format=3 uid="uid://blhop6xxf4e7f"]
 
 [ext_resource type="Script" path="res://world/world.gd" id="1_3mal0"]
-[ext_resource type="Texture2D" uid="uid://dcts6dr1mggcy" path="res://world/floor_main.png" id="1_mpuym"]
+[ext_resource type="Texture2D" uid="uid://bj428axfuovuy" path="res://world/floor_main.png" id="1_mpuym"]
 [ext_resource type="PackedScene" uid="uid://bpvsuqrmyoivc" path="res://characters/player/player.tscn" id="2_dqglm"]
+[ext_resource type="PackedScene" uid="uid://btgt83hrrq4pi" path="res://characters/chicken/chicken.tscn" id="4_2lopn"]
 
 [sub_resource type="Curve2D" id="Curve2D_17h6k"]
 _data = {
@@ -10,22 +11,23 @@ _data = {
 }
 point_count = 5
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("player", "start_position", "mob_spawn_location", "mob_timer")]
+[sub_resource type="Curve2D" id="Curve2D_l50bv"]
+_data = {
+"points": PackedVector2Array(-260.334, 60.9562, 260.334, -60.9562, 64, 76, -55.8765, -33.0179, 55.8765, 33.0179, 600, 198, 49.5269, -44.4472, -49.5269, 44.4472, 705, 442, 128.262, -114.293, -128.262, 114.293, 281, 411, -148.581, -132.072, 148.581, 132.072, 249, 838, -191.758, 167.63, 191.758, -167.63, 964, 848, -226.046, 95.2441, 226.046, -95.2441, 969, 95, -10.1594, -307.321, 10.1594, 307.321, 1771, 308, -2.53984, -401.295, 2.53984, 401.295, 1166, 552, -226.046, -82.5449, 226.046, 82.5449, 1672, 678, 0, 0, 0, 0, 1691, 1059)
+}
+point_count = 11
+
+[node name="World" type="Node2D" node_paths=PackedStringArray("player", "mob_spawn_location", "mob_timer", "player_path_follow")]
 script = ExtResource("1_3mal0")
-player = NodePath("Player")
-start_position = NodePath("StartPosition")
+player = NodePath("PlayerPath/PlayerPathFollow/Player")
 mob_spawn_location = NodePath("MobPath/MobSpawnLocation")
 mob_timer = NodePath("MobTimer")
+player_path_follow = NodePath("PlayerPath/PlayerPathFollow")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("1_mpuym")
-
-[node name="Player" parent="." instance=ExtResource("2_dqglm")]
-
-[node name="StartPosition" type="Marker2D" parent="."]
-position = Vector2(960, 540)
 
 [node name="MobPath" type="Path2D" parent="."]
 curve = SubResource("Curve2D_17h6k")
@@ -35,5 +37,21 @@ position = Vector2(1920, 0)
 rotation = 1.5708
 
 [node name="MobTimer" type="Timer" parent="."]
+
+[node name="PlayerPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_l50bv")
+
+[node name="PlayerPathFollow" type="PathFollow2D" parent="PlayerPath"]
+position = Vector2(64, 76)
+rotation = -0.230003
+rotates = false
+
+[node name="Player" parent="PlayerPath/PlayerPathFollow" instance=ExtResource("2_dqglm")]
+position = Vector2(-44.9881, -88.5893)
+rotation = 0.230003
+
+[node name="Chicken" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_2lopn")]
+position = Vector2(752, 450)
+player = NodePath("../PlayerPath/PlayerPathFollow/Player")
 
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]

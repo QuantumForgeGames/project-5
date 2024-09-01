@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://r5g55u0uynu7"]
+[gd_scene load_steps=4 format=3 uid="uid://r5g55u0uynu7"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_0s1wp"]
 [ext_resource type="PackedScene" uid="uid://blhop6xxf4e7f" path="res://world/world.tscn" id="3_r0gao"]
-[ext_resource type="AudioStream" uid="uid://dyx8rvekumw25" path="res://audio/music_level1.wav" id="5_1rqno"]
 [ext_resource type="PackedScene" uid="uid://dsgpqwdascowj" path="res://gui/gui.tscn" id="5_l1k28"]
 
 [node name="Main" type="Node" node_paths=PackedStringArray("world", "gui", "start_timer", "music_player")]
@@ -19,6 +18,5 @@ music_player = NodePath("MusicPlayer")
 [node name="StartTimer" type="Timer" parent="."]
 
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_1rqno")
 
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]

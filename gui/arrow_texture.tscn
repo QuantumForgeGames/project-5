@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfqwvrfrh8l6p"]
+
+[ext_resource type="Texture2D" uid="uid://l1wiam04v4ce" path="res://gui/arrow_texture.tres" id="1_601ew"]
+
+[node name="ArrowTexture" type="TextureRect"]
+custom_minimum_size = Vector2(32, 32)
+size_flags_horizontal = 6
+size_flags_vertical = 4
+texture = ExtResource("1_601ew")
+stretch_mode = 4
