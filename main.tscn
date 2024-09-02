@@ -1,15 +1,37 @@
-[gd_scene load_steps=4 format=3 uid="uid://r5g55u0uynu7"]
+[gd_scene load_steps=15 format=3 uid="uid://r5g55u0uynu7"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_0s1wp"]
 [ext_resource type="PackedScene" uid="uid://blhop6xxf4e7f" path="res://world/world.tscn" id="3_r0gao"]
+[ext_resource type="AudioStream" uid="uid://guxnboo1ovy7" path="res://audio/Note 1.wav" id="4_rggwj"]
+[ext_resource type="AudioStream" uid="uid://d0se045xhhf0v" path="res://audio/Note 2.wav" id="5_8pe3k"]
 [ext_resource type="PackedScene" uid="uid://dsgpqwdascowj" path="res://gui/gui.tscn" id="5_l1k28"]
+[ext_resource type="AudioStream" uid="uid://dldwjpu716chu" path="res://audio/Note 3.wav" id="6_c31qc"]
+[ext_resource type="AudioStream" uid="uid://6gtqrh8h6fbg" path="res://audio/gtr loop.wav" id="6_hq6uy"]
+[ext_resource type="AudioStream" uid="uid://bhvftjxm7kkk8" path="res://audio/Chicken.wav" id="8_4kv5e"]
+[ext_resource type="AudioStream" uid="uid://dxocih4wapq8o" path="res://audio/ChickenAngry-001.wav" id="8_12tl8"]
+[ext_resource type="AudioStream" uid="uid://7n88a3eoa141" path="res://audio/ChickenAngry-002.wav" id="9_5xk33"]
+[ext_resource type="AudioStream" uid="uid://c3s72u62wrm2u" path="res://audio/woosh 2.wav" id="9_v4jiq"]
+[ext_resource type="AudioStream" uid="uid://uqrk6fjiwhf5" path="res://audio/ChickenAngry-003.wav" id="10_mboeo"]
 
-[node name="Main" type="Node" node_paths=PackedStringArray("world", "gui", "start_timer", "music_player")]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_kpkug"]
+playback_mode = 2
+streams_count = 3
+stream_0/stream = ExtResource("4_rggwj")
+stream_1/stream = ExtResource("5_8pe3k")
+stream_2/stream = ExtResource("6_c31qc")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_6ef6x"]
+playback_mode = 1
+streams_count = 3
+stream_0/stream = ExtResource("8_12tl8")
+stream_1/stream = ExtResource("9_5xk33")
+stream_2/stream = ExtResource("10_mboeo")
+
+[node name="Main" type="Node" node_paths=PackedStringArray("world", "gui", "start_timer")]
 script = ExtResource("1_0s1wp")
 world = NodePath("World")
 gui = NodePath("GUI")
 start_timer = NodePath("StartTimer")
-music_player = NodePath("MusicPlayer")
 
 [node name="World" parent="." instance=ExtResource("3_r0gao")]
 
@@ -17,6 +39,28 @@ music_player = NodePath("MusicPlayer")
 
 [node name="StartTimer" type="Timer" parent="."]
 
-[node name="MusicPlayer" type="AudioStreamPlayer2D" parent="."]
+[node name="musicOneShots" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_kpkug")
+volume_db = 2.971
+max_polyphony = 3
+playback_type = 2
+
+[node name="musicLoop" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("6_hq6uy")
+
+[node name="sfxChickensAngry" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_6ef6x")
+
+[node name="sfxWoosh" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("9_v4jiq")
+volume_db = 5.448
+
+[node name="sfxChickensFollow" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("8_4kv5e")
 
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]

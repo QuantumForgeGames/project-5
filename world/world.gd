@@ -5,6 +5,10 @@ extends Node2D
 @export var mob_spawn_location: PathFollow2D
 @export var mob_timer: Timer
 @export var player_path_follow: PathFollow2D
+@export var musicOneShots : AudioStreamPlayer2D
+@export var sfxChickensAngry : AudioStreamPlayer2D
+@export var sfxChickensFollow : AudioStreamPlayer2D
+@export var sfxWoosh : AudioStreamPlayer2D
 
 var arrow_array: Array
 var current_arrow: int
@@ -14,6 +18,10 @@ var found_chicken: Area2D
 #enum {LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW}
 
 func start(array: Array):
+	musicOneShots = get_node ("%musicOneShots")
+	sfxChickensAngry = get_node ("%sfxChickensAngry")
+	sfxChickensFollow = get_node ("%sfxChickensFollow")
+	sfxWoosh = get_node ("%sfxWoosh")
 	arrow_array = array
 	player.start()
 	current_arrow_index = 0
@@ -43,8 +51,10 @@ func check_arrow_direction(input_arrow):
 	# Check if moving or if aquiring a chicken
 	# IF moving do this:
 	if input_arrow == current_arrow:
+		musicOneShots.play()
 		if !is_player_seducing_chicken:
 			move_player()
+			sfxWoosh.play()
 		current_arrow_index += 1
 		if current_arrow_index < arrow_array.size():
 			current_arrow = arrow_array[current_arrow_index]
@@ -52,11 +62,14 @@ func check_arrow_direction(input_arrow):
 			if found_chicken:
 				found_chicken.should_follow_player = true
 				is_player_seducing_chicken = false
+				sfxChickensFollow.play()
 				# Reset the list?
 				current_arrow_index = 0
 				current_arrow = arrow_array[current_arrow_index]
+				
 	else:
 		$Chicken.get_angry() # Maybe all chickens get angry?
+		sfxChickensAngry.play()
 
 
 func player_found_chicken(chicken: Area2D):
