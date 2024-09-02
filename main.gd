@@ -6,7 +6,7 @@ extends Node
 @export var start_timer: Timer
 @export var music_player: AudioStreamPlayer2D
 
-var arrow_array: Array = [Game.LEFT_ARROW, Game.UP_ARROW, Game.RIGHT_ARROW, Game.DOWN_ARROW]
+var arrow_array: Array = [Game.RIGHT_ARROW]
 
 func _ready() -> void:
 	#world.player.gameplay_ended.connect(game_over)
