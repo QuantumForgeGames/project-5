@@ -10,8 +10,8 @@ extends Node
 @export var sfxWoosh : AudioStreamPlayer2D
 
 
-
 var arrow_array: Array = [Game.RIGHT_ARROW]
+
 
 func _ready() -> void:
 	#world.player.gameplay_ended.connect(game_over)
@@ -20,8 +20,9 @@ func _ready() -> void:
 	#audio
 	musicLoop_player = get_node ("%musicLoop")
 	musicOneShots = get_node ("%musicOneShots")
-	sfxChickens = get_node ("%sfxChickens")
+	sfxChickens = get_node ("%sfxChickensFollow")
 	sfxWoosh = get_node ("%sfxWoosh")
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("quit"):

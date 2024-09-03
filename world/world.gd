@@ -10,22 +10,22 @@ extends Node2D
 @export var sfxChickensFollow : AudioStreamPlayer2D
 @export var sfxWoosh : AudioStreamPlayer2D
 
-var arrow_array: Array
 var current_arrow: int
 var current_arrow_index: int
 var is_player_seducing_chicken: bool
 var found_chicken: Area2D
-#enum {LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW}
+var move_arrow_array: Array
+var seduce_arrow_array: Array
 
 func start(array: Array):
 	musicOneShots = get_node ("%musicOneShots")
 	sfxChickensAngry = get_node ("%sfxChickensAngry")
 	sfxChickensFollow = get_node ("%sfxChickensFollow")
 	sfxWoosh = get_node ("%sfxWoosh")
-	arrow_array = array
+	move_arrow_array = array
 	player.start()
 	current_arrow_index = 0
-	current_arrow = arrow_array[current_arrow_index]
+	current_arrow = move_arrow_array[current_arrow_index]
 	player_path_follow.progress_ratio = move_toward(player_path_follow.progress_ratio, 0.01, 0.001)
 	# TODO: Link all chickens to player_found_chicken on their emit
 	$Chicken.player_arrived.connect(player_found_chicken)
@@ -49,12 +49,27 @@ func _input(event: InputEvent) -> void:
 
 func check_arrow_direction(input_arrow):
 	# Check if moving or if aquiring a chicken
+	
+	# Check against moving
+	# Check agaist seduction
+	
+	# set the arrow_array here
+	var arrow_array: Array
+	if is_player_seducing_chicken:
+		arrow_array = seduce_arrow_array
+	else:
+		arrow_array = move_arrow_array
+	
+	print(arrow_array)
+	
 	# IF moving do this:
 	if input_arrow == current_arrow:
 		musicOneShots.play()
 		if !is_player_seducing_chicken:
 			move_player()
 			sfxWoosh.play()
+		else:
+			found_chicken.progress_arrows()
 		current_arrow_index += 1
 		if current_arrow_index < arrow_array.size():
 			current_arrow = arrow_array[current_arrow_index]
@@ -66,7 +81,6 @@ func check_arrow_direction(input_arrow):
 				# Reset the list?
 				current_arrow_index = 0
 				current_arrow = arrow_array[current_arrow_index]
-				
 	else:
 		$Chicken.get_angry() # Maybe all chickens get angry?
 		sfxChickensAngry.play()
@@ -75,36 +89,11 @@ func check_arrow_direction(input_arrow):
 func player_found_chicken(chicken: Area2D):
 	is_player_seducing_chicken = true
 	found_chicken = chicken
-	arrow_array.append_array(chicken.arrow_pattern)
+	seduce_arrow_array = chicken.arrow_pattern
+	move_arrow_array.append_array(chicken.arrow_pattern)
 
 
 func move_player():
 	var new_position = player_path_follow.progress_ratio + .025
 	var tween = create_tween()
 	tween.tween_property(self, "player_path_follow:progress_ratio", new_position, 1)
-
-
-#func _on_mob_timer_timeout() -> void:
-	## Create a new instance of the Mob scene.
-	#var mob = GameScenes.MobScene.instantiate()
-#
-	## Choose a random location on Path2D.
-	#var mob_spawn_location = mob_spawn_location
-	#mob_spawn_location.progress_ratio = randf()
-#
-	## Set the mob's direction perpendicular to the path direction.
-	#var direction = mob_spawn_location.rotation + PI / 2
-#
-	## Set the mob's position to a random location.
-	#mob.position = mob_spawn_location.position
-#
-	## Add some randomness to the direction.
-	#direction += randf_range(-PI / 4, PI / 4)
-	#mob.rotation = direction
-#
-	## Choose the velocity for the mob.
-	#var velocity = Vector2(randf_range(150.0, 250.0), 0.0)
-	#mob.linear_velocity = velocity.rotated(direction)
-#
-	## Spawn the mob by adding it to the Main scene.
-	#add_child(mob)

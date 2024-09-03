@@ -8,6 +8,7 @@ signal player_arrived
 
 var arrow_pattern: Array
 const AMOUNT_OF_ARROWS: int = 3
+var current_arrow: int
 
 var should_follow_player: bool = false
 var rng = RandomNumberGenerator.new()
@@ -28,6 +29,9 @@ func _ready() -> void:
 				arrows.get_child(arrow).rotation_degrees = 90
 			Game.DOWN_ARROW:
 				arrows.get_child(arrow).rotation_degrees = 180
+				
+	current_arrow = 0
+	arrows.get_child(current_arrow).set("modulate", Color(.1, .8, .1))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -49,7 +53,17 @@ func _process(delta: float) -> void:
 	#if velocity.length() > 0:
 		#velocity = velocity.normalized() * SPEED
 	#position += velocity * delta
+		
 
+func progress_arrows():
+	if current_arrow < 3:
+		if arrows.get_child(current_arrow) and current_arrow < AMOUNT_OF_ARROWS:
+			arrows.get_child(current_arrow).set("modulate", Color(.1, .1, .1))
+			current_arrow += 1
+	if current_arrow < 3:
+		if arrows.get_child(current_arrow):
+			arrows.get_child(current_arrow).set("modulate", Color(.1, .8, .1))
+	
 
 func blink_arrows():
 	var tween = get_tree().create_tween()
@@ -67,4 +81,5 @@ func get_angry():
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
+		print("This happened!@")
 		player_arrived.emit(self)
